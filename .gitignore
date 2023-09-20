@@ -171,5 +171,5 @@ networktables.json.bck
 # File that has git and version data
 src/main/java/frc/robot/util/BuildData.java
 
-# IntelliJ IDEA files
+# Intellij IDEA files
 .idea/
