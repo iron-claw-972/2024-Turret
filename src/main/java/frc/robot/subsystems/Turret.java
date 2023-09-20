@@ -36,12 +36,40 @@ public class Turret extends SubsystemBase {
         // This method will be called once per scheduler run during simulation
     }
 
+    /**
+     * Points the turret to the specified angle.
+     * <br>
+     * Uses soft-stops, stops in the software to ensure the turret doesn't overrotate.
+     * @param angle The angle to point to, in degrees.
+     *              <br>
+     *              This value is reduced to the range [0, 360).
+     */
     public void point(double angle) {
         double target = angle % 360;
         double current = encoder.getAbsolutePosition();
     }
 
+    /**
+     * Points the turret to the specified angle.
+     * <br>
+     * Relies on hard-stops to ensure the turret doesn't overrotate.
+     * @param angle The angle to point to, in degrees.
+     *              <br>
+     *              This value is reduced to the range [0, 360).
+     */
+    public void pointUnsafe(double angle) {
 
+    }
 
+    /**
+     * Returns if the angle from the encoder is within
+     * the specified tolerance of the target angle.
+     * <br>
+     * The tolerance is in degrees, and can be found in [todo: insert constants file].
+     * @return If the angle is within the tolerance.
+     */
+    public boolean isAtTarget() {
+        return false;
+    }
 
 }
