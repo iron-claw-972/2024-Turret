@@ -158,10 +158,10 @@ public class RobotContainer {
     GenericEntry testEntry = m_testTab.add("Test Results", false).getEntry();
     m_testTab.add("Blinkin Id",0.65).getEntry();
     m_testTab.add("Cancel Command", new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
-    m_testTab.add("Set turret to 30 degrees", new InstantCommand(() -> m_turret.point(30)));
-    m_testTab.add("Set turret to 60 degrees", new InstantCommand(() -> m_turret.point(60)));
-    m_testTab.add("Set turret to 90 degrees", new InstantCommand(() -> m_turret.point(90)));
-    m_testTab.add("Set turret to -60 degrees", new InstantCommand(() -> m_turret.point(-60)));
+    m_testTab.add("Set turret to 30 degrees", new InstantCommand(() -> m_turret.point(30, false)));
+    m_testTab.add("Set turret to 60 degrees", new InstantCommand(() -> m_turret.point(60, false)));
+    m_testTab.add("Set turret to 90 degrees", new InstantCommand(() -> m_turret.point(90, false)));
+    m_testTab.add("Set turret to -60 degrees", new InstantCommand(() -> m_turret.point(-60, false)));
 
     if (m_drive != null) {
       m_drive.addTestCommands(m_testTab, testEntry);

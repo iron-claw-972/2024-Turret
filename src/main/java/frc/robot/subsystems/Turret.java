@@ -22,8 +22,12 @@ import frc.robot.constants.TurretConstants;
 import frc.robot.util.ConversionUtils;
 import frc.robot.util.MathUtils;
 import frc.robot.util.MotorFactory;
+import frc.robot.util.Vision;
 
 public class Turret extends SubsystemBase {
+
+    private final Vision vision;
+    private final Drivetrain drivetrain;
 
     private final WPI_TalonFX motor;
     private final DutyCycleEncoder encoder;
@@ -37,8 +41,11 @@ public class Turret extends SubsystemBase {
 
     private final PIDController visionPid;
 
-    public Turret() {
-        // Temporary values
+    public Turret(Vision vision, Drivetrain drivetrain) {
+
+        this.vision = vision;
+        this.drivetrain = drivetrain;
+
         motor = MotorFactory.createTalonFXSupplyLimit(
                 TurretConstants.MOTOR_ID,
                 Constants.kRioCAN,
@@ -65,6 +72,8 @@ public class Turret extends SubsystemBase {
                 0,
                 0
         );
+        // TODO: Constant
+        visionPid.setTolerance(0.1);
 
         if (RobotBase.isSimulation()) {
             encoderSim = new DutyCycleEncoderSim(encoder);
@@ -102,24 +111,66 @@ public class Turret extends SubsystemBase {
     /**
      * Points the turret to the specified angle.
      * <br>
-     * Uses soft-stops, stops in the software to ensure the turret doesn't overrotate.
+     * Uses soft-stops, stops in the software to
+     * ensure the turret doesn't overrotate.
      * @param angle The angle to point to, in degrees.
      *              <br>
      *              This value is reduced to the range [0, 360).
+     * @param compensateForDrive If true, the turret will compensate
+     *                           for the drivetrain being in motion
+     *                           by adding an adequate neutralisation
+     *                           angle opposite to the drivetrain's
+     *                           speed.
      */
-    public void point(double angle) {
+    public void point(double angle, boolean compensateForDrive) {
         angle %= 360;
-        double currentAngle = (RobotBase.isReal() ? encoder.getAbsolutePosition() : encoder.get());
+        double currentAngle = getAngle();
         double toTurn = angle - currentAngle;
-        System.out.println("To turn: " + toTurn);
-        System.out.println("Current angle: " + currentAngle);
-        System.out.println("Angle: " + angle);
+
+        if (compensateForDrive) {
+            toTurn += compensateForDrive(toTurn);
+        }
 
         setSetpoint(pid.getSetpoint() + toTurn);
-
         if (RobotBase.isSimulation()) {
             simulationAngle += toTurn;
         }
+    }
+
+    /**
+     * Points the turret at a tag found by the vision system.
+     * <br>
+     * If no tag is found, then the turret will not move.
+     * @param compensateForDrive If true, the turret will compensate
+     *                           for the drivetrain being in motion
+     *                           by adding an adequate neutralisation
+     *                           angle opposite to the drivetrain's
+     *                           speed.
+     */
+    public void pointAtTag(boolean compensateForDrive) {
+        // TODO: Once new vision is implemented into this code, use this
+//        if (!vision.hasValidTarget()) {
+//            return;
+//        }
+        double horizontalOffset = 0;
+        // TODO: Once new vision is implemented into this code, use this
+//        double horizontalOffset = vision.getHorizontalOffset();
+        point(getAngle() + horizontalOffset, compensateForDrive);
+    }
+
+    /**
+     *
+     * @param angle
+     * @return
+     */
+    public double compensateForDrive(double angle) {
+        double vx = drivetrain.getFieldRelativeChassisSpeeds().vxMetersPerSecond;
+        double vy = drivetrain.getFieldRelativeChassisSpeeds().vyMetersPerSecond;
+        double vTheta = Math.toDegrees(
+                drivetrain.getFieldRelativeChassisSpeeds().omegaRadiansPerSecond
+        );
+
+        return 0;
     }
 
     protected void setSetpoint(double setpoint) {
@@ -136,12 +187,20 @@ public class Turret extends SubsystemBase {
      * Returns if the angle from the encoder is within
      * the specified tolerance of the target angle.
      * <br>
-     * The tolerance is in degrees, and can be found in [todo: insert constants file].
+     * The tolerance is in degrees, and
+     * can be found in {@link TurretConstants}.
      *
      * @return If the angle is within the tolerance.
      */
     public boolean isAtTarget() {
         return pid.atSetpoint();
+    }
+
+    /**
+     * @return Returns the current angle of the turret.
+     */
+    public double getAngle() {
+        return (RobotBase.isReal() ? encoder.getAbsolutePosition() : encoder.get());
     }
 
 }
