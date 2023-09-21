@@ -160,6 +160,14 @@ public class RobotContainer {
         GenericEntry testEntry = testTab.add("Test Results", false).getEntry();
         testTab.add("Blinkin Id", 0.65).getEntry();
         testTab.add("Cancel Command", new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
+        testTab.add("Set turret to 30 degrees", new InstantCommand(() -> m_turret.point(30)));
+        testTab.add("Set turret to 60 degrees", new InstantCommand(() -> m_turret.point(60)));
+        testTab.add("Set turret to 90 degrees", new InstantCommand(() -> m_turret.point(90)));
+        testTab.add("Set turret to -60 degrees", new InstantCommand(() -> m_turret.point(-60)));
+
+        if (drive != null) {
+            drive.addTestCommands(testTab, testEntry);
+        }
 
         if (drive != null) {
             drive.addTestCommands(testTab, testEntry);
@@ -169,7 +177,6 @@ public class RobotContainer {
             vision.addTestCommands(testTab, testEntry, drive);
         }
     }
-
 
     /**
      * Loads the command scheduler shuffleboard which will add event markers whenever a command finishes, ends, or is interrupted.

@@ -89,14 +89,14 @@ public class Turret extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
         double toTurn = simulationAngle * 0.1;
-        if (Math.abs(toTurn) < 0.005) {
+        // TODO: We probably need to make a limit to how fast the turret can turn
+        if (Math.abs(toTurn) < 0.001) {
             simulationAngle = 0;
             return;
         }
         simulationAngle -= toTurn;
         simulationLigament.setAngle(simulationLigament.getAngle() + toTurn);
         encoderSim.set(simulationLigament.getAngle());
-        System.out.println(encoder.get());
     }
 
     /**
@@ -111,6 +111,9 @@ public class Turret extends SubsystemBase {
         angle %= 360;
         double currentAngle = (RobotBase.isReal() ? encoder.getAbsolutePosition() : encoder.get());
         double toTurn = angle - currentAngle;
+        System.out.println("To turn: " + toTurn);
+        System.out.println("Current angle: " + currentAngle);
+        System.out.println("Angle: " + angle);
 
         setSetpoint(pid.getSetpoint() + toTurn);
 
