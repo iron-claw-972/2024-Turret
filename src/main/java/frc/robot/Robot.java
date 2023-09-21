@@ -121,7 +121,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Teleop mode. */
   @Override
   public void teleopInit() {
-    m_robotContainer.resetModules();
+//    m_robotContainer.resetModules();
     
     // In teleop, may enable vision for use for grid/shelf alignment
     m_robotContainer.setVisionEnabled(true);

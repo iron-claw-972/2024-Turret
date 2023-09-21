@@ -19,6 +19,7 @@ import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.controls.PS5ControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Turret;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 
@@ -48,6 +49,7 @@ public class RobotContainer {
 
   // The robot's subsystems are defined here...
   private final Drivetrain m_drive;
+  private final Turret m_turret;
 
 
   // Controllers are defined here
@@ -55,6 +57,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer(RobotId robotId) {
+
+    m_turret = new Turret();
 
     // PowerDistribution m_PDModule = new PowerDistribution(1, ModuleType.kRev);
     // m_PDModule.clearStickyFaults();
@@ -154,6 +158,7 @@ public class RobotContainer {
     GenericEntry testEntry = m_testTab.add("Test Results", false).getEntry();
     m_testTab.add("Blinkin Id",0.65).getEntry();
     m_testTab.add("Cancel Command", new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
+    m_testTab.add("Set turret to 30 degrees", new InstantCommand(() -> m_turret.point(30)));
 
     if (m_drive != null) {
       m_drive.addTestCommands(m_testTab, testEntry);
@@ -188,7 +193,7 @@ public class RobotContainer {
    * Sets whether the drivetrain uses vision to update odometry
    */
   public void setVisionEnabled(boolean enabled) {
-    m_drive.enableVision(enabled);
+//    m_drive.enableVision(enabled);
   }
 
 }
