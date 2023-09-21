@@ -49,7 +49,7 @@ public class RobotContainer {
 
     // The robot's subsystems are defined here...
     private final Drivetrain drive;
-    private final Turret m_turret;
+    private final Turret turret;
 
 
     // Controllers are defined here
@@ -64,7 +64,6 @@ public class RobotContainer {
         // PDModule.clearStickyFaults();
         // PDModule.close();
 
-        m_turret = new Turret();
 
         switch (robotId) {
             case SwerveCompetition:
@@ -141,6 +140,7 @@ public class RobotContainer {
 
         if (Constants.USE_TELEMETRY) loadCommandSchedulerShuffleboard();
 
+        turret = new Turret(vision, drive);
         addTestCommands();
     }
 
@@ -160,10 +160,10 @@ public class RobotContainer {
         GenericEntry testEntry = testTab.add("Test Results", false).getEntry();
         testTab.add("Blinkin Id", 0.65).getEntry();
         testTab.add("Cancel Command", new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
-        testTab.add("Set turret to 30 degrees", new InstantCommand(() -> m_turret.point(30)));
-        testTab.add("Set turret to 60 degrees", new InstantCommand(() -> m_turret.point(60)));
-        testTab.add("Set turret to 90 degrees", new InstantCommand(() -> m_turret.point(90)));
-        testTab.add("Set turret to -60 degrees", new InstantCommand(() -> m_turret.point(-60)));
+        testTab.add("Set turret to 30 degrees", new InstantCommand(() -> turret.point(30, true)));
+        testTab.add("Set turret to 60 degrees", new InstantCommand(() -> turret.point(60, true)));
+        testTab.add("Set turret to 90 degrees", new InstantCommand(() -> turret.point(90, true)));
+        testTab.add("Set turret to -60 degrees", new InstantCommand(() -> turret.point(-60, true)));
 
         if (drive != null) {
             drive.addTestCommands(testTab, testEntry);
