@@ -19,6 +19,7 @@ import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.controls.PS5ControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Turret;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
 
@@ -48,6 +49,7 @@ public class RobotContainer {
 
     // The robot's subsystems are defined here...
     private final Drivetrain drive;
+    private final Turret m_turret;
 
 
     // Controllers are defined here
@@ -61,6 +63,8 @@ public class RobotContainer {
         // PowerDistribution PDModule = new PowerDistribution(1, ModuleType.kRev);
         // PDModule.clearStickyFaults();
         // PDModule.close();
+
+        m_turret = new Turret();
 
         switch (robotId) {
             case SwerveCompetition:
@@ -176,7 +180,6 @@ public class RobotContainer {
         CommandScheduler.getInstance().onCommandInterrupt(command -> Shuffleboard.addEventMarker("Command interrupted", command.getName(), EventImportance.kNormal));
         CommandScheduler.getInstance().onCommandFinish(command -> Shuffleboard.addEventMarker("Command finished", command.getName(), EventImportance.kNormal));
     }
-
 
     /**
      * Resets the swerve modules to their absolute positions.
