@@ -89,7 +89,6 @@ public class Turret extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
         double toTurn = simulationAngle * 0.1;
-        System.out.println(encoder.getPositionOffset());
         if (Math.abs(toTurn) < 0.005) {
             simulationAngle = 0;
             return;
