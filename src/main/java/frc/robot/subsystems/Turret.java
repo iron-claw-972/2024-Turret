@@ -95,6 +95,8 @@ public class Turret extends SubsystemBase {
         }
         simulationAngle -= toTurn;
         simulationLigament.setAngle(simulationLigament.getAngle() + toTurn);
+        encoderSim.set(simulationLigament.getAngle());
+        System.out.println(encoder.get());
     }
 
     /**
@@ -107,13 +109,13 @@ public class Turret extends SubsystemBase {
      */
     public void point(double angle) {
         angle %= 360;
-        double currentAngle = encoder.getAbsolutePosition() - encoder.getPositionOffset();
+        double currentAngle = (RobotBase.isReal() ? encoder.getAbsolutePosition() : encoder.get());
         double toTurn = angle - currentAngle;
 
         setSetpoint(pid.getSetpoint() + toTurn);
 
         if (RobotBase.isSimulation()) {
-            simulationAngle = angle;
+            simulationAngle += toTurn;
         }
     }
 
