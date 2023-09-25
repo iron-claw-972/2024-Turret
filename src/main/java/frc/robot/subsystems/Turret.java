@@ -159,9 +159,10 @@ public class Turret extends SubsystemBase {
     }
 
     /**
+     * Compensates for the drivetrain being in motion.
      *
      * @param angle
-     * @return
+     * @return The angle to add, in order to compensate for the drivetrain.
      */
     public double compensateForDrive(double angle) {
         double vx = drivetrain.getFieldRelativeChassisSpeeds().vxMetersPerSecond;
