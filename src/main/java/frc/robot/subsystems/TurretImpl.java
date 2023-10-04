@@ -14,9 +14,11 @@ public class TurretImpl extends Turret {
 
     public TurretImpl() {
 
+        System.out.println("TurretImpl");
+
         motor = MotorFactory.createTalonFXSupplyLimit(
                 TurretConstants.MOTOR_ID,
-                Constants.kRioCAN,
+                Constants.RIO_CAN,
                 TurretConstants.CONTINUOUS_CURRENT_LIMIT,
                 TurretConstants.PEAK_CURRENT_LIMIT,
                 TurretConstants.PEAK_CURRENT_DURATION

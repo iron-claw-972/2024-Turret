@@ -18,6 +18,7 @@ import frc.robot.controls.BaseDriverConfig;
 import frc.robot.controls.GameControllerDriverConfig;
 import frc.robot.controls.PS5ControllerDriverConfig;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.SubsystemFactory;
 import frc.robot.subsystems.Turret;
 import frc.robot.util.PathGroupLoader;
 import frc.robot.util.Vision;
@@ -60,6 +61,8 @@ public class RobotContainer {
         // PowerDistribution m_PDModule = new PowerDistribution(1, ModuleType.kRev);
         // m_PDModule.clearStickyFaults();
         // m_PDModule.close();
+
+        turret = (Turret) SubsystemFactory.get(Turret.class);
 
         switch (robotId) {
             case SwerveCompetition:
@@ -136,7 +139,6 @@ public class RobotContainer {
 
         if (Constants.USE_TELEMETRY) loadCommandSchedulerShuffleboard();
 
-        turret = new Turret();
         addTestCommands();
     }
 

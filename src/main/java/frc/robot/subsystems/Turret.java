@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.TurretConstants;
 
+@SubsystemImpl(TurretImpl.class)
 public class Turret extends SubsystemBase {
 
     final DutyCycleEncoder encoder;
@@ -26,6 +27,8 @@ public class Turret extends SubsystemBase {
     private final PIDController visionPid;
 
     public Turret() {
+
+        System.out.println("Turret");
 
         encoder = new DutyCycleEncoder(TurretConstants.ENCODER_PORT);
 

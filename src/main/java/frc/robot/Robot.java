@@ -152,7 +152,7 @@ public class Robot extends TimedRobot {
      *
      * <p>This method is private.
      */
-    private RobotId getRobotId() {
+    public static RobotId getRobotId() {
 
         // Return cached value if available
         if (ROBOT_ID != null) {
@@ -197,7 +197,7 @@ public class Robot extends TimedRobot {
      * <p>
      * This method is private. Calling it after the robot has been constructed does not affect the robot.
      */
-    private void setRobotId(RobotId robotId) {
+    private static void setRobotId(RobotId robotId) {
         // Set the robot identity in the RoboRIO Preferences
         Preferences.setString(Constants.ROBOT_ID_KEY, robotId.name());
         ROBOT_ID = robotId;
