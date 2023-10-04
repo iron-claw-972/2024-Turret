@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.Robot.RobotId;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.constants.Constants;
 import frc.robot.constants.miscConstants.VisionConstants;
@@ -140,7 +139,7 @@ public class RobotContainer {
 
         if (Constants.USE_TELEMETRY) loadCommandSchedulerShuffleboard();
 
-        turret = new Turret(vision, drive);
+        turret = new Turret();
         addTestCommands();
     }
 
@@ -160,10 +159,10 @@ public class RobotContainer {
         GenericEntry testEntry = testTab.add("Test Results", false).getEntry();
         testTab.add("Blinkin Id", 0.65).getEntry();
         testTab.add("Cancel Command", new InstantCommand(() -> CommandScheduler.getInstance().cancelAll()));
-        testTab.add("Set turret to 30 degrees", new InstantCommand(() -> turret.point(30, true)));
-        testTab.add("Set turret to 60 degrees", new InstantCommand(() -> turret.point(60, true)));
-        testTab.add("Set turret to 90 degrees", new InstantCommand(() -> turret.point(90, true)));
-        testTab.add("Set turret to -60 degrees", new InstantCommand(() -> turret.point(-60, true)));
+        testTab.add("Set turret to 30 degrees", new InstantCommand(() -> turret.point(30)));
+        testTab.add("Set turret to 60 degrees", new InstantCommand(() -> turret.point(60)));
+        testTab.add("Set turret to 90 degrees", new InstantCommand(() -> turret.point(90)));
+        testTab.add("Set turret to -60 degrees", new InstantCommand(() -> turret.point(-60)));
 
         if (drive != null) {
             drive.addTestCommands(testTab, testEntry);
