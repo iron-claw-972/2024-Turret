@@ -49,8 +49,6 @@ public class RobotContainer {
     // The robot's subsystems are defined here...
     private final Drivetrain drive;
     private final Turret turret;
-
-
     // Controllers are defined here
     private final BaseDriverConfig driver;
 
@@ -59,10 +57,9 @@ public class RobotContainer {
      */
     public RobotContainer(RobotId robotId) {
 
-        // PowerDistribution PDModule = new PowerDistribution(1, ModuleType.kRev);
-        // PDModule.clearStickyFaults();
-        // PDModule.close();
-
+        // PowerDistribution m_PDModule = new PowerDistribution(1, ModuleType.kRev);
+        // m_PDModule.clearStickyFaults();
+        // m_PDModule.close();
 
         switch (robotId) {
             case SwerveCompetition:
