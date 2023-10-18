@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -33,15 +32,13 @@ public class Turret extends SubsystemBase {
     double targetAngle;
 
     public Turret() {
-        if (RobotBase.isSimulation()) {
-            Mechanism2d simulationMechanism = new Mechanism2d(3, 3);
-            MechanismRoot2d mechanismRoot = simulationMechanism.getRoot("Turret", 1.5, 1.5);
-            simulationLigament = mechanismRoot.append(
-                    new MechanismLigament2d("angle", 1, 0, 4, new Color8Bit(Color.kOrange))
-            );
+        Mechanism2d simulationMechanism = new Mechanism2d(3, 3);
+        MechanismRoot2d mechanismRoot = simulationMechanism.getRoot("Turret", 1.5, 1.5);
+        simulationLigament = mechanismRoot.append(
+                new MechanismLigament2d("angle", 1, 0, 4, new Color8Bit(Color.kOrange))
+        );
 
-            SmartDashboard.putData("Turret", simulationMechanism);
-        }
+        SmartDashboard.putData("Turret", simulationMechanism);
     }
 
     @Override
