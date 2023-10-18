@@ -8,10 +8,15 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.robot.RobotId;
 import frc.robot.constants.Constants;
 import frc.robot.constants.TurretConstants;
 import frc.robot.util.MotorFactory;
 
+/**
+ * Motor-based implementation of the turret subsystem. Only created for robots marked with having a turret in
+ * {@link RobotId}.
+ */
 public class TurretImpl extends Turret {
 
     private final DutyCycleEncoder encoder;
@@ -31,8 +36,6 @@ public class TurretImpl extends Turret {
     private final DutyCycleEncoderSim encoderSim;
 
     public TurretImpl() {
-
-        System.out.println("TurretImpl");
 
         motor = MotorFactory.createTalonFXSupplyLimit(
                 TurretConstants.MOTOR_ID,
@@ -83,6 +86,7 @@ public class TurretImpl extends Turret {
 
     @Override
     public void point(double angle) {
+        angle %= 360;
         pid.reset();
         pid.setSetpoint(angle);
     }

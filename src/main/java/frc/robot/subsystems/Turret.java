@@ -11,16 +11,26 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.TurretConstants;
 
 /**
- * The Turret subsystem. All measurements in degrees.
+ * Simulation for the turret subsystem for robots that don't have a turret.
  */
 @SubsystemImpl(TurretImpl.class)
 public class Turret extends SubsystemBase {
 
-    // Simulation
     private Mechanism2d simulationMechanism;
     private MechanismLigament2d simulationLigament;
 
+    /**
+     * The current angle of the turret in degrees.
+     * <br>
+     * Used for simulation.
+     */
     double angle;
+
+    /**
+     * The target angle of the turret in degrees.
+     * <br>
+     * Used for simulation.
+     */
     double targetAngle;
 
     public Turret() {
@@ -47,14 +57,10 @@ public class Turret extends SubsystemBase {
     }
 
     /**
-     * Points the turret to the specified angle.
+     * Points the turret to the specified angle in degrees.
      * <br>
-     * Uses soft-stops, stops in the software to
-     * ensure the turret doesn't overrotate.
-     * <br>
-     * Methods that override this method should
-     * call the super method.
-     * @param angle The angle to point to, in degrees.
+     * Uses soft-stops, stops in the software to ensure the turret doesn't overrotate.
+     * @param angle The angle to point to in degrees.
      *              <br>
      *              This value is reduced to the range [0, 360).
      */
@@ -65,12 +71,9 @@ public class Turret extends SubsystemBase {
     }
 
     /**
-     * Returns if the angle from the encoder is within
-     * the specified tolerance of the target angle.
+     * Returns if the angle from the encoder is within the specified tolerance of the target angle.
      * <br>
-     * The tolerance is in degrees, and
-     * can be found in {@link TurretConstants}.
-     *
+     * The tolerance is in degrees, and can be found in {@link TurretConstants}.
      * @return If the angle is within the tolerance.
      */
     public boolean isAtTarget() {
@@ -78,7 +81,7 @@ public class Turret extends SubsystemBase {
     }
 
     /**
-     * @return Returns the current angle of the turret.
+     * @return The current angle of the turret in degrees.
      */
     public double getAngle() {
         return angle;
