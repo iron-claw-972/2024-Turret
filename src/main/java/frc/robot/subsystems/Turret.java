@@ -65,8 +65,11 @@ public class Turret extends SubsystemBase {
      */
     public void point(double angle) {
         // TODO: make [-180, 180] instead of [0, 360)
-        angle %= 360;
-        this.targetAngle = angle;
+        double newAngle = angle % 360;
+        if (newAngle > 180){
+            newAngle -= 360;
+        }
+        this.targetAngle = newAngle;
     }
 
     /**
