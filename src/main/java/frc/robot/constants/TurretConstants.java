@@ -11,6 +11,10 @@ public class TurretConstants {
 
     public static final int MOTOR_ID = 0;
 
+    public static final int GEAR_RATIO = 1;
+    public static final int MOMENT_OF_INERTIA = 1;
+    public static final double RADIUS = 1;
+
     public static final int CONTINUOUS_CURRENT_LIMIT = 40;
     public static final int PEAK_CURRENT_LIMIT = 60;
     public static final int PEAK_CURRENT_DURATION = 100;

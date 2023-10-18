@@ -3,7 +3,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.constants.Constants;
 import frc.robot.constants.TurretConstants;
 import frc.robot.util.MotorFactory;
@@ -23,6 +27,9 @@ public class TurretImpl extends Turret {
             0
     );
 
+    private final SingleJointedArmSim sim;
+    private final DutyCycleEncoderSim encoderSim;
+
     public TurretImpl() {
 
         System.out.println("TurretImpl");
@@ -41,11 +48,21 @@ public class TurretImpl extends Turret {
         encoder = new DutyCycleEncoder(TurretConstants.ENCODER_PORT);
         encoder.setDistancePerRotation(360);
 
+        sim = new SingleJointedArmSim(
+                DCMotor.getFalcon500(1),
+                TurretConstants.GEAR_RATIO,
+                TurretConstants.MOMENT_OF_INERTIA,
+                TurretConstants.RADIUS,
+                0,
+                360,
+                false
+        );
+        encoderSim = new DutyCycleEncoderSim(encoder);
+
         pid.setTolerance(TurretConstants.TOLERANCE);
 
         // TODO: Constants
         visionPid.setTolerance(0.1);
-
     }
 
     @Override
@@ -58,9 +75,10 @@ public class TurretImpl extends Turret {
 
     @Override
     public void simulationPeriodic() {
-        // TODO: Update encoder sim position
-//        motor.getSimCollection()
-        // TODO: FIX
+        sim.setInput(motor.get() * RobotController.getBatteryVoltage());
+        sim.update(Constants.LOOP_TIME);
+
+        encoderSim.setDistance(Math.toDegrees(sim.getAngleRads()));
     }
 
     @Override
