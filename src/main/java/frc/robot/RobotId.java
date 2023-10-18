@@ -23,13 +23,6 @@ public enum RobotId {
     @SafeVarargs
     RobotId(Class<? extends SubsystemBase>... subsystems) {
         this.subsystems = List.of(subsystems);
-        for (Class<? extends SubsystemBase> subsystem : subsystems) {
-            try {
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     public List<Class<? extends SubsystemBase>> getSubsystems() {

@@ -1,9 +1,6 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -13,37 +10,21 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.TurretConstants;
 
+/**
+ * The Turret subsystem. All measurements in degrees.
+ */
 @SubsystemImpl(TurretImpl.class)
 public class Turret extends SubsystemBase {
 
-    final DutyCycleEncoder encoder;
-
     // Simulation
-    private DutyCycleEncoderSim encoderSim;
     private Mechanism2d simulationMechanism;
     private MechanismLigament2d simulationLigament;
-    private double simulationAngle;
 
-    private final PIDController visionPid;
+    double angle;
+    double targetAngle;
 
     public Turret() {
-
-        System.out.println("Turret");
-
-        encoder = new DutyCycleEncoder(TurretConstants.ENCODER_PORT);
-
-        visionPid = new PIDController(
-                0,
-                0,
-                0
-        );
-        // TODO: Constant
-        visionPid.setTolerance(0.1);
-
         if (RobotBase.isSimulation()) {
-
-            encoderSim = new DutyCycleEncoderSim(encoder);
-
             simulationMechanism = new Mechanism2d(3, 3);
             MechanismRoot2d mechanismRoot = simulationMechanism.getRoot("Turret", 1.5, 1.5);
             simulationLigament = mechanismRoot.append(
@@ -55,16 +36,14 @@ public class Turret extends SubsystemBase {
     }
 
     @Override
+    public void periodic() {
+        double add = (targetAngle - angle) * 0.2;
+        angle += add;
+    }
+
+    @Override
     public void simulationPeriodic() {
-        double toTurn = simulationAngle * 0.1;
-        // TODO: We probably need to make a limit to how fast the turret can turn
-        if (Math.abs(toTurn) < 0.001) {
-            simulationAngle = 0;
-            return;
-        }
-        simulationAngle -= toTurn;
-        simulationLigament.setAngle(simulationLigament.getAngle() + toTurn);
-        encoderSim.set(simulationLigament.getAngle());
+        simulationLigament.setAngle(angle);
     }
 
     /**
@@ -79,13 +58,10 @@ public class Turret extends SubsystemBase {
      *              <br>
      *              This value is reduced to the range [0, 360).
      */
-    public double point(double angle) {
+    public void point(double angle) {
+        // TODO: make [-180, 180] instead of [0, 360)
         angle %= 360;
-        double currentAngle = getAngle();
-        double toTurn = angle - currentAngle;
-
-        simulationAngle += toTurn;
-        return toTurn;
+        this.targetAngle = angle;
     }
 
     /**
@@ -98,14 +74,14 @@ public class Turret extends SubsystemBase {
      * @return If the angle is within the tolerance.
      */
     public boolean isAtTarget() {
-        return simulationAngle == 0;
+        return Math.abs(angle - targetAngle) < TurretConstants.TOLERANCE;
     }
 
     /**
      * @return Returns the current angle of the turret.
      */
     public double getAngle() {
-        return encoder.get();
+        return angle;
     }
 
 }

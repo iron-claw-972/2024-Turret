@@ -3,14 +3,25 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import frc.robot.constants.Constants;
 import frc.robot.constants.TurretConstants;
 import frc.robot.util.MotorFactory;
 
 public class TurretImpl extends Turret {
 
+    private final DutyCycleEncoder encoder;
     private final WPI_TalonFX motor;
-    private final PIDController pid;
+    private final PIDController pid = new PIDController(
+            TurretConstants.P,
+            TurretConstants.I,
+            TurretConstants.D
+    );
+    private final PIDController visionPid = new PIDController(
+            0,
+            0,
+            0
+    );
 
     public TurretImpl() {
 
@@ -27,37 +38,35 @@ public class TurretImpl extends Turret {
         motor.setInverted(TurretConstants.INVERTED);
         motor.enableVoltageCompensation(true);
 
-        pid = new PIDController(
-                TurretConstants.P,
-                TurretConstants.I,
-                TurretConstants.D
-        );
+        encoder = new DutyCycleEncoder(TurretConstants.ENCODER_PORT);
+        encoder.setDistancePerRotation(360);
+
         pid.setTolerance(TurretConstants.TOLERANCE);
+
+        // TODO: Constants
+        visionPid.setTolerance(0.1);
 
     }
 
     @Override
     public void periodic() {
-        double current = encoder.getAbsolutePosition();
-        double power = pid.calculate(current, pid.getSetpoint());
-        setMotorPower(power);
+        double current = encoder.getDistance();
+        double power = pid.calculate(current);
+
+        motor.set(MathUtil.clamp(power, -TurretConstants.MOTOR_POWER_CLAMP, TurretConstants.MOTOR_POWER_CLAMP));
     }
 
     @Override
-    public double point(double angle) {
-        double toTurn = super.point(angle);
-        setSetpoint(pid.getSetpoint() + toTurn);
-        return toTurn;
+    public void simulationPeriodic() {
+        // TODO: Update encoder sim position
+//        motor.getSimCollection()
+        // TODO: FIX
     }
 
-    protected void setSetpoint(double setpoint) {
+    @Override
+    public void point(double angle) {
         pid.reset();
-        pid.setSetpoint(setpoint);
-    }
-
-    protected void setMotorPower(double power) {
-        power = MathUtil.clamp(power, -TurretConstants.MOTOR_POWER_CLAMP, TurretConstants.MOTOR_POWER_CLAMP);
-        motor.set(power);
+        pid.setSetpoint(angle);
     }
 
     @Override
