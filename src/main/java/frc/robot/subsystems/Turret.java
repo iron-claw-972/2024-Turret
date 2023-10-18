@@ -16,7 +16,6 @@ import frc.robot.constants.TurretConstants;
 @SubsystemImpl(TurretImpl.class)
 public class Turret extends SubsystemBase {
 
-    private Mechanism2d simulationMechanism;
     private MechanismLigament2d simulationLigament;
 
     /**
@@ -35,7 +34,7 @@ public class Turret extends SubsystemBase {
 
     public Turret() {
         if (RobotBase.isSimulation()) {
-            simulationMechanism = new Mechanism2d(3, 3);
+            Mechanism2d simulationMechanism = new Mechanism2d(3, 3);
             MechanismRoot2d mechanismRoot = simulationMechanism.getRoot("Turret", 1.5, 1.5);
             simulationLigament = mechanismRoot.append(
                     new MechanismLigament2d("angle", 1, 0, 4, new Color8Bit(Color.kOrange))
