@@ -16,7 +16,7 @@ import frc.robot.constants.TurretConstants;
 @SubsystemImpl(TurretImpl.class)
 public class Turret extends SubsystemBase {
 
-    private MechanismLigament2d simulationLigament;
+    protected MechanismLigament2d simulationLigament;
 
     /**
      * The current angle of the turret in degrees.

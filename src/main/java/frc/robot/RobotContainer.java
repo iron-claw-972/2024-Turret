@@ -190,14 +190,14 @@ public class RobotContainer {
      * Resets the swerve modules to their absolute positions.
      */
     public void resetModules() {
-        drive.resetModulesToAbsolute();
+//        drive.resetModulesToAbsolute();
     }
 
     /**
      * Sets whether the drivetrain uses vision to update odometry
      */
     public void setVisionEnabled(boolean enabled) {
-        drive.enableVision(enabled);
+//        drive.enableVision(enabled);
     }
 
 }

@@ -5,6 +5,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
@@ -32,10 +33,11 @@ public class TurretImpl extends Turret {
             0
     );
 
-    private final SingleJointedArmSim sim;
-    private final DutyCycleEncoderSim encoderSim;
+    private SingleJointedArmSim sim;
+    private DutyCycleEncoderSim encoderSim;
 
     public TurretImpl() {
+        super();
 
         motor = MotorFactory.createTalonFXSupplyLimit(
                 TurretConstants.MOTOR_ID,
@@ -51,16 +53,18 @@ public class TurretImpl extends Turret {
         encoder = new DutyCycleEncoder(TurretConstants.ENCODER_PORT);
         encoder.setDistancePerRotation(360);
 
-        sim = new SingleJointedArmSim(
-                DCMotor.getFalcon500(1),
-                TurretConstants.GEAR_RATIO,
-                TurretConstants.MOMENT_OF_INERTIA,
-                TurretConstants.RADIUS,
-                0,
-                360,
-                false
-        );
-        encoderSim = new DutyCycleEncoderSim(encoder);
+        if (RobotBase.isSimulation()) {
+            sim = new SingleJointedArmSim(
+                    DCMotor.getFalcon500(1),
+                    TurretConstants.GEAR_RATIO,
+                    TurretConstants.MOMENT_OF_INERTIA,
+                    TurretConstants.RADIUS,
+                    Math.toRadians(-180),
+                    Math.toRadians(180),
+                    false
+            );
+            encoderSim = new DutyCycleEncoderSim(encoder);
+        }
 
         pid.setTolerance(TurretConstants.TOLERANCE);
 
@@ -73,15 +77,24 @@ public class TurretImpl extends Turret {
         double current = encoder.getDistance();
         double power = pid.calculate(current);
 
-        motor.set(MathUtil.clamp(power, -TurretConstants.MOTOR_POWER_CLAMP, TurretConstants.MOTOR_POWER_CLAMP));
+        System.out.println("Power: " + power + " Current: " + current + " Setpoint: " + pid.getSetpoint() + " Error: " + pid.getPositionError() + " At Setpoint: " + pid.atSetpoint());
+
+        motor.set(MathUtil.clamp(power, -TurretConstants.MOTOR_POWER_CLAMP,
+                TurretConstants.MOTOR_POWER_CLAMP));
     }
 
     @Override
     public void simulationPeriodic() {
-        sim.setInput(motor.get() * RobotController.getBatteryVoltage());
+
+        motor.getSimCollection().setBusVoltage(RobotController.getBatteryVoltage());
+
+        sim.setInput(motor.getSimCollection().getMotorOutputLeadVoltage() * RobotController.getBatteryVoltage());
         sim.update(Constants.LOOP_TIME);
 
+//        System.out.println(RobotController.getBatteryVoltage());
+
         encoderSim.setDistance(Math.toDegrees(sim.getAngleRads()));
+        simulationLigament.setAngle(Math.toDegrees(sim.getAngleRads()));
     }
 
     @Override
@@ -89,6 +102,7 @@ public class TurretImpl extends Turret {
         angle %= 360;
         pid.reset();
         pid.setSetpoint(angle);
+        System.out.println("Setpoint: " + angle);
     }
 
     @Override
