@@ -67,12 +67,8 @@ public class Turret extends SubsystemBase {
      *              This value is reduced to the range [0, 360).
      */
     public void point(double angle) {
-        // TODO: make [-180, 180] instead of [0, 360)
-        double newAngle = angle % 360;
-        if (newAngle > 180){
-            newAngle -= 360;
-        }
-        this.targetAngle = newAngle;
+        
+        this.targetAngle = parseAngle(angle);
     }
 
     /**
@@ -90,6 +86,26 @@ public class Turret extends SubsystemBase {
      */
     public double getAngle() {
         return angle;
+    }
+
+
+    /**
+     * @return parsed angle between [-180, 180]
+     */
+    protected double parseAngle(double angle){
+        angle %= 360;
+
+        if (angle > 180) {
+            angle -= 360;
+        } 
+
+        if (angle < -180) {
+            angle += 360;
+        } 
+
+        return angle;
+
+        
     }
 
 }
