@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
@@ -54,8 +55,8 @@ public class TurretImpl extends Turret {
                     TurretConstants.GEAR_RATIO,
                     TurretConstants.MOMENT_OF_INERTIA,
                     TurretConstants.RADIUS,
-                    Math.toRadians(-180),
-                    Math.toRadians(180),
+                    Units.radiansToDegrees(-180),
+                    Units.radiansToDegrees(180),
                     false
             );
             encoderSim = new DutyCycleEncoderSim(encoder);
