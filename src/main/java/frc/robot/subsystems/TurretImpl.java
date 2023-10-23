@@ -27,11 +27,6 @@ public class TurretImpl extends Turret {
             TurretConstants.I,
             TurretConstants.D
     );
-    private final PIDController visionPid = new PIDController(
-            0,
-            0,
-            0
-    );
 
     private SingleJointedArmSim sim;
     private DutyCycleEncoderSim encoderSim;
@@ -68,8 +63,6 @@ public class TurretImpl extends Turret {
 
         pid.setTolerance(TurretConstants.TOLERANCE);
 
-        // TODO: Constants
-        visionPid.setTolerance(0.1);
     }
 
     @Override
