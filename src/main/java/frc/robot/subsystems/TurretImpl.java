@@ -71,8 +71,6 @@ public class TurretImpl extends Turret {
         double current = encoder.getDistance();
         double power = pid.calculate(current);
 
-        System.out.println("Power: " + power + " Current: " + current + " Setpoint: " + pid.getSetpoint() + " Error: " + pid.getPositionError() + " At Setpoint: " + pid.atSetpoint());
-
         motor.set(MathUtil.clamp(power, -TurretConstants.MOTOR_POWER_CLAMP,
                 TurretConstants.MOTOR_POWER_CLAMP));
     }
@@ -85,8 +83,6 @@ public class TurretImpl extends Turret {
         sim.setInput(motor.getSimCollection().getMotorOutputLeadVoltage() * RobotController.getBatteryVoltage());
         sim.update(Constants.LOOP_TIME);
 
-//        System.out.println(RobotController.getBatteryVoltage());
-
         encoderSim.setDistance(Math.toDegrees(sim.getAngleRads()));
         simulationLigament.setAngle(Math.toDegrees(sim.getAngleRads()));
     }
@@ -96,7 +92,6 @@ public class TurretImpl extends Turret {
         angle %= 360;
         pid.reset();
         pid.setSetpoint(angle);
-        System.out.println("Setpoint: " + angle);
     }
 
     @Override
