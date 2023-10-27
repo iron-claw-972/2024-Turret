@@ -33,8 +33,7 @@ public class Turret extends SubsystemBase {
     double targetAngle;
 
     public Turret() {
-        // This turret implementation will only be used for robots that don't have a turret, both real and
-        // simulated. Because of this, the isSimulation() check is needed in order to not expend resources to an
+        // This turret implementation will only be used for robots that don't have a turret Because of this, the isSimulation() check is needed in order to not expend resources to an
         // unneeded task in the case of a real robot.
         if (RobotBase.isSimulation()) {
             Mechanism2d simulationMechanism = new Mechanism2d(3, 3);
