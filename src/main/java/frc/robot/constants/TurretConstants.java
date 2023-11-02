@@ -12,8 +12,8 @@ public class TurretConstants {
     public static final int MOTOR_ID = 0;
 
     public static final int GEAR_RATIO = 1;
-    public static final int MOMENT_OF_INERTIA = 1;
-    public static final double RADIUS = 1;
+    public static final double MOMENT_OF_INERTIA = 0.01403;
+    public static final double RADIUS = 0.127;
 
     public static final int CONTINUOUS_CURRENT_LIMIT = 40;
     public static final int PEAK_CURRENT_LIMIT = 60;
